@@ -1,4 +1,4 @@
-package com.labbol.service.configuration.mybatis;
+package com.labbol.service.configuration.mycat;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;

@@ -1,4 +1,4 @@
-package com.labbol.service.configuration.mybatis;
+package com.labbol.service.configuration.mycat;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
-import com.labbol.core.Labbol;
+import com.labbol.core.LabbolPluginSupport;
 
 @Configuration
-@ConditionalOnProperty(prefix = Labbol.LABBOL_PROPERTIES_PREFIX,
+@ConditionalOnProperty(prefix = LabbolPluginSupport.PROPERTIES_PREFIX,
 name = "mycat",
 havingValue = "true",
 matchIfMissing = false)
