@@ -21,7 +21,7 @@ havingValue = "true",
 matchIfMissing = false)
 @ConditionalOnBean(SqlSessionFactory.class)
 @AutoConfigureAfter(MybatisAutoConfiguration.class)
-public class MyBatisMycatAutoConfiguration {
+public class MycatAutoConfiguration {
 	
 	@Autowired
 	private List<SqlSessionFactory> sqlSessionFactoryList;

@@ -1,4 +1,4 @@
-package com.labbol.core.check.sign.exception;
+package com.labbol.service.exception;
 
 public class InvalidSignException extends Exception {
 	

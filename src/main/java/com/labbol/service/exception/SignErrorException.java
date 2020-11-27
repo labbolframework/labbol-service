@@ -1,7 +1,4 @@
-package com.labbol.core.check.sign.exception;
-
-import com.labbol.service.exception.CommonException;
-import com.labbol.service.exception.CommonExceptionEnum;
+package com.labbol.service.exception;
 
 public class SignErrorException extends CommonException {
 

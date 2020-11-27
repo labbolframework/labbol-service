@@ -23,7 +23,7 @@ import com.labbol.service.exception.CommonException;
 /**
  * @ClassName: AbstractSignHandlerInterceptor
  * @Description: 签名过滤器
- * @author Dwayne
+ * @author dwayne
  * @date 2020年3月20日
  *
  */
@@ -58,7 +58,15 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		return true;
 	}
 	
-	
+	/**
+	 * @Description: 获取SignValidate注解
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:56:49 
+	 * @param @param hanlderMethod
+	 * @param @return 参数 
+	 * @return SignValidate 返回类型 
+	 * @throws
+	 */
 	protected SignValidate getSignValidate(HandlerMethod hanlderMethod) {
 		Method method = hanlderMethod.getMethod();
 		if(method.isAnnotationPresent(SignValidate.class)) {
@@ -80,21 +88,77 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		}
 	}
 	
+	/**
+	 * @Description: 判断是否sign验证
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:51:29 
+	 * @param @param request
+	 * @param @param handlerMethod
+	 * @param @param signValidate
+	 * @param @return 参数 
+	 * @return boolean 返回类型 
+	 * @throws
+	 */
 	protected boolean isValidateSign(HttpServletRequest request, HandlerMethod handlerMethod, @org.yelong.core.annotation.Nullable SignValidate signValidate) {
 		if(null == signValidate || !signValidate.validate())
 			return false;
 		return true;
 	}
 	
+	/**
+	 * @Description: sign验证
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:52:18 
+	 * @param @param parameterMap
+	 * @param @param headerMap
+	 * @param @param body
+	 * @param @param sign
+	 * @param @return 参数 
+	 * @return boolean 返回类型 
+	 * @throws
+	 */
 	protected abstract boolean validateSign(Map<String, String> parameterMap, Map<String, String> headerMap, String body, String sign);
 	
+	/**
+	 * @Description: 获取请求信息
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:52:40 
+	 * @param @param parameterMap
+	 * @param @param headerMap
+	 * @param @param body
+	 * @param @return 参数 
+	 * @return RequestMapBean 返回类型 
+	 * @throws
+	 */
 	protected abstract RequestMapBean getRequestMapBean(Map<String, String> parameterMap, Map<String, String> headerMap, String body);
 	
+	/**
+	 * @Description: sign验证处理器
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:58:36 
+	 * @param @param request
+	 * @param @param response
+	 * @param @param commonException
+	 * @param @throws Exception 参数 
+	 * @return void 返回类型 
+	 * @throws
+	 */
 	protected void invalidSignHandler(HttpServletRequest request, HttpServletResponse response , CommonException commonException) throws Exception {}
 	
+	/**
+	 * @Description: 初始化 
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:53:28 
+	 * @param @param request
+	 * @param @param headerParameters
+	 * @param @param signParamName
+	 * @param @return
+	 * @param @throws IOException 参数 
+	 * @return RequestMapBean 返回类型 
+	 * @throws
+	 */
 	protected RequestMapBean init(HttpServletRequest request, String []headerParameters, String signParamName) throws IOException {
 		RequestMapBean bean = new RequestMapBean();
-//		initValue();
 		initHeaderMap(request, headerParameters, bean);
 		initParameterMap(request, bean);
 		initRequestBody(request, bean);
@@ -102,14 +166,16 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		return bean;
 	}
 	
-//	protected void initValue() {
-//		headerMap = new HashMap<String, String>();
-//		parameterMap = new HashMap<String, String>();
-//		setBody(null);
-//		setSign(null);
-//	}
-	
-	
+	/**
+	 * @Description: 请求头初始化
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:53:47 
+	 * @param @param request
+	 * @param @param headerParameters
+	 * @param @param bean 参数 
+	 * @return void 返回类型 
+	 * @throws
+	 */
 	protected void initHeaderMap(HttpServletRequest request, String []headerParameters, RequestMapBean bean){
 		Map<String, String> headerMap = new HashMap<String, String>();
 		if(ArrayUtils.isEmpty(headerParameters))
@@ -120,6 +186,15 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		bean.setHeaderMap(headerMap);
 	}
 	
+	/**
+	 * @Description: 请求参数初始化
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:54:09 
+	 * @param @param request
+	 * @param @param bean 参数 
+	 * @return void 返回类型 
+	 * @throws
+	 */
 	protected void initParameterMap(HttpServletRequest request, RequestMapBean bean) {
 		Map<String, String> parameterMap = new HashMap<String, String>();
 		Enumeration<?> parameterNames  = request.getParameterNames();
@@ -132,6 +207,16 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		bean.setParameterMap(parameterMap);
 	}
 	
+	/**
+	 * @Description: 请求体初始化 
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:54:51 
+	 * @param @param request
+	 * @param @param bean
+	 * @param @throws IOException 参数 
+	 * @return void 返回类型 
+	 * @throws
+	 */
 	protected void initRequestBody(HttpServletRequest request, RequestMapBean bean) throws IOException {
 		if(StringUtils.isNotBlank(request.getHeader("Content-Type")) && 
 				request.getHeader("Content-Type").contains("multipart/form-data"))
@@ -139,7 +224,17 @@ public abstract class AbstractSignHandlerInterceptor extends org.yelong.support.
 		else
 			bean.setBody(org.yelong.support.servlet.wrapper.HttpServletRequestReuseWrapper.readerBodyStr(request));
 	}
-
+	
+	/**
+	 * @Description: sign初始化
+	 * @author: dwayne
+	 * @date: 2020年11月27日 下午6:55:14 
+	 * @param @param request
+	 * @param @param signParamName
+	 * @param @param bean 参数 
+	 * @return void 返回类型 
+	 * @throws
+	 */
 	protected void initSign(HttpServletRequest request, String signParamName, RequestMapBean bean) {
 		bean.setSign(request.getHeader(signParamName));
 	}
