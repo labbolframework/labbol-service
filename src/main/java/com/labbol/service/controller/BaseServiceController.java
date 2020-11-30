@@ -6,6 +6,8 @@ package com.labbol.service.controller;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.yelong.commons.beans.BeanUtilsE;
 import org.yelong.commons.lang.annotation.AnnotationUtilsE;
@@ -15,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.labbol.core.controller.BaseCoreController;
 import com.labbol.core.queryinfo.QueryInfo;
+import com.labbol.core.service.LabbolModelService;
 import com.labbol.core.utils.ColumnSupportUtils;
 import com.labbol.service.exception.InvalidParameterException;
 import com.labbol.service.exception.VeryLongParameterException;
@@ -23,6 +26,9 @@ import com.labbol.service.exception.VeryLongParameterException;
  * @author PengFei
  */
 public class BaseServiceController extends BaseCoreController {
+	
+	@Resource
+	protected LabbolModelService modelService;
 
 	/**
 	 * 查询结果转换为json字符
