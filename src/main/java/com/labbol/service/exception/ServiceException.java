@@ -65,9 +65,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * 发生了以外的异常
-	 * 
-	 * @param throwable
+	 * 发生了意外的异常
 	 */
 	public ServiceException(ErrorResponse errorResponse, Throwable throwable) {
 		super(throwable);

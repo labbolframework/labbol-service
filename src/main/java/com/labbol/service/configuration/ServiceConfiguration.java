@@ -22,21 +22,21 @@ public class ServiceConfiguration {
 	public ServiceExceptionResolver serviceExceptionResolver() {
 		return new ServiceExceptionResolver();
 	}
-	
+
 	@Bean
 	@ConditionalOnProperty(prefix = Labbol.LABBOL_PROPERTIES_PREFIX, name = "loginMode", havingValue = "sign", matchIfMissing = false)
 	@Order(10000)
 	public DefaultSignInterceptor defaultSignInterceptor() {
 		return new DefaultSignInterceptor();
 	}
-	
+
 	@Bean
 	@ConditionalOnProperty(prefix = Labbol.LABBOL_PROPERTIES_PREFIX, name = "loginMode", havingValue = "token", matchIfMissing = false)
 	@Order(10000)
 	public DefaultAuthTokenInterceptor defaultAuthTokenInterceptor() {
 		return new DefaultAuthTokenInterceptor();
 	}
-	
+
 	@Bean
 	@ConditionalOnProperty(prefix = Labbol.LABBOL_PROPERTIES_PREFIX, name = "loginMode", havingValue = "test", matchIfMissing = false)
 	@Order(10000)

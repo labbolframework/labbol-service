@@ -3,6 +3,7 @@
  */
 package com.labbol.core.check.token;
 
+import com.labbol.core.Labbol;
 import com.labbol.core.check.CurrentLoginUserInfo;
 import com.labbol.core.platform.role.model.Role;
 
@@ -18,7 +19,7 @@ public class RequestUserInfo extends CurrentLoginUserInfo
 	private Role role;
 
 	public RequestUserInfo(String token) {
-		this.setAttribute("X-Auth-Token", token);
+		this.setAttribute(Labbol.X_AUTH_TOKEN, token);
 	}
 
 	public String getUserName() {
@@ -31,6 +32,10 @@ public class RequestUserInfo extends CurrentLoginUserInfo
 
 	public String getOrgName() {
 		return getOrg() == null ? null : getOrg().getOrgName();
+	}
+
+	public String getOrgNo() {
+		return getOrg() == null ? null : getOrg().getOrgNo();
 	}
 
 	public String getUserRealName() {

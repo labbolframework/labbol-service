@@ -55,17 +55,15 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 
 	/**
 	 * 获取可以对model实现值为null的字段update的问题。
-	 * 
-	 * @author 彭飞
-	 * @date 2019年10月21日下午4:04:25
-	 * @version 1.0
-	 * @return
+	 * @see #getModelDeserializerGsonBuilder()
 	 */
-	@Deprecated
 	protected GsonBuilder getModelGsonBuilder() {
 		return modelDeserializerGsonBuilder;
 	}
 
+	/**
+	 * @see #getModelGsonBuilder()
+	 */
 	public static GsonBuilder getModelDeserializerGsonBuilder() {
 		return modelDeserializerGsonBuilder;
 	}
@@ -76,11 +74,6 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 
 	/**
 	 * 获取可以对model实现值为null的字段update的问题。 暂未开发
-	 * 
-	 * @author 彭飞
-	 * @date 2019年10月21日下午4:04:25
-	 * @version 1.0
-	 * @return
 	 */
 	protected Gson getModelGson() {
 		return getModelGsonBuilder().create();
@@ -88,12 +81,6 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 
 	/**
 	 * 将json字符串转换为指定的类型对象
-	 * 
-	 * @author 彭飞
-	 * @date 2019年7月17日下午6:56:52
-	 * @param json request的请求消息体
-	 * @return
-	 * @throws InvalidParameterException 如果json转换不为指定的类型则抛出此异常
 	 */
 	public abstract T jsonToObject(String json) throws Exception;
 

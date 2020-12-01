@@ -36,7 +36,7 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 	protected boolean validateToken(String token) throws InvalidTokenException {
 		if (StringUtils.isEmpty(token) || !tokenIsValid(token)) {
 			// 如果token无效则抛出token无效异常
-			throw new InvalidTokenException(token);
+			throw new InvalidTokenException(token, "无效的令牌：" + token);
 		} else {
 			// 续命，未实装
 		}
@@ -70,6 +70,7 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 
 	/**
 	 * 验证token是否有效
+	 * 
 	 * @param token
 	 * @return <code>true</code> 有效
 	 */
