@@ -87,6 +87,29 @@ public class BaseServiceController extends BaseCoreController {
 		validateRequestRequiredParameters(queryInfo, DEFAULT_QUERY_INFO_NOT_ENTRY_FIELD);
 	}
 
+	/**
+	 * 验证所有的值是否都是 <code>null</code>或者空白字符串
+	 * 
+	 * @author PengFei
+	 * @date 2020年12月1日上午11:48:15
+	 * @param values 需要验证的值
+	 * @return <code>true</code> 所有的值都是 <code>null</code> 或者空白字符串
+	 */
+	protected boolean isAllNullOrBlank(Object... values) {
+		for (Object value : values) {
+			if (null == value) {
+				continue;
+			}
+			if (value instanceof CharSequence) {
+				if (StringUtils.isBlank((CharSequence) value)) {
+					continue;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
 	// ==================================================toJson==================================================
 
 	/**
