@@ -11,8 +11,10 @@ public class ErrorResponse {
 	private String code;
 	private String msg;
 
+	public ErrorResponse() {
+	}
+	
 	public ErrorResponse(String code, String msg) {
-		super();
 		this.code = code;
 		this.msg = msg;
 	}
