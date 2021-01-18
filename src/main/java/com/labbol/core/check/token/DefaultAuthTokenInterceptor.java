@@ -10,7 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
+import org.yelong.commons.util.Dates;
+import org.yelong.core.model.collector.ModelCollectors;
 import org.yelong.support.spring.mvc.token.AbstractTokenHandlerInterceptor;
 import org.yelong.support.spring.mvc.token.InvalidTokenException;
 
@@ -20,6 +25,7 @@ import com.labbol.core.platform.token.model.Token;
 import com.labbol.core.platform.user.model.User;
 import com.labbol.core.platform.user.service.UserRightCommonService;
 import com.labbol.core.service.LabbolModelService;
+import com.labbol.service.exception.AuthTokenErrorException;
 
 /**
  * @author PengFei
@@ -32,13 +38,18 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 	@Resource
 	private UserRightCommonService userRightService;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthTokenInterceptor.class);
+
 	@Override
 	protected boolean validateToken(String token) throws InvalidTokenException {
 		if (StringUtils.isEmpty(token) || !tokenIsValid(token)) {
 			// 如果token无效则抛出token无效异常
-			throw new InvalidTokenException(token, "无效的令牌：" + token);
+			throw new AuthTokenErrorException(token);
 		} else {
-			// 续命，未实装
+			// 续命
+			Token tokenModel = new Token();
+			tokenModel.setAuthExpireTime(DateUtils.addMonths(Dates.nowDate(), 60));
+			modelService.collect(ModelCollectors.modifyModelBySingleColumnEQ(tokenModel, "authToken", token));
 		}
 		return true;
 	}
@@ -58,6 +69,8 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 		requestUserInfo.setOpRights(userRightService.findModuleIds(user.getId()));
 
 		CurrentLoginUserInfoHolder.setCurrentLoginUserInfo(requestUserInfo);
+		LOGGER.info(
+				"--------------------------------------------------token验证完毕--------------------------------------------------");
 		return requestUserInfo;
 	}
 
@@ -71,7 +84,7 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 	/**
 	 * 验证token是否有效
 	 * 
-	 * @param token
+	 * @param token token
 	 * @return <code>true</code> 有效
 	 */
 	private boolean tokenIsValid(String token) {

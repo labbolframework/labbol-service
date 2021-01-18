@@ -8,7 +8,7 @@ package com.labbol.service.exception;
  * 
  * @author PengFei
  */
-public enum CommonExceptionEnum {
+public enum CommonExceptionEnum implements ErrorResponseSupplier {
 
 	SERVICE_CONNECT_ERROR("common.service-connect-error", "服务网络连接异常"),
 	DB_CONNECT_ERROR("common.db-connect-error", "数据库连接异常"),
@@ -28,14 +28,17 @@ public enum CommonExceptionEnum {
 		errorResponse = new ErrorResponse(code, msg);
 	}
 
+	@Override
 	public ErrorResponse getErrorResponse() {
 		return errorResponse;
 	}
 
+	@Override
 	public String getCode() {
 		return errorResponse.getCode();
 	}
 
+	@Override
 	public String getMsg() {
 		return errorResponse.getMsg();
 	}

@@ -9,11 +9,12 @@ package com.labbol.service.exception;
 public class ErrorResponse {
 
 	private String code;
+
 	private String msg;
 
 	public ErrorResponse() {
 	}
-	
+
 	public ErrorResponse(String code, String msg) {
 		this.code = code;
 		this.msg = msg;

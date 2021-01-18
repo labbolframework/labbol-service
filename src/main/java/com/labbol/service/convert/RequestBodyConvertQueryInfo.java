@@ -31,12 +31,7 @@ public class RequestBodyConvertQueryInfo extends AbstractRequestBodyConvertObjec
 
 	@Override
 	public QueryInfo jsonToObject(String json) throws InvalidParameterException {
-		try {
-			return new Gson().fromJson(json, QueryInfoWrapper.class).getQueryInfo();
-		} catch (Exception e) {
-			throw new InvalidParameterException(e);
-		}
-
+		return new Gson().fromJson(json, QueryInfoWrapper.class).getQueryInfo();
 	}
 
 	public class QueryInfoWrapper {

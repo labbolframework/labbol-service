@@ -29,6 +29,10 @@ public class CommonException extends ServiceException {
 		super(commonException.getErrorResponse(), message);
 	}
 
+	public CommonException(CommonExceptionEnum commonException, String message, Throwable t) {
+		super(commonException.getErrorResponse(), message, t);
+	}
+
 	/**
 	 * @param commonException 异常类型
 	 */

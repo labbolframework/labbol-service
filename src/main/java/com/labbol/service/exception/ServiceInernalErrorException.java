@@ -24,4 +24,8 @@ public class ServiceInernalErrorException extends CommonException {
 		super(CommonExceptionEnum.SERVICE_INERNAL_ERROR, t);
 	}
 
+	public ServiceInernalErrorException(String message, Throwable t) {
+		super(CommonExceptionEnum.SERVICE_INERNAL_ERROR, message, t);
+	}
+
 }

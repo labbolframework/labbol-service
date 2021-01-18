@@ -3,10 +3,14 @@
  */
 package com.labbol.service.convert;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yelong.support.json.gson.model.ModelByteJsonDeserializer;
 import org.yelong.support.json.gson.model.ModelCharacterJsonDeserializer;
 import org.yelong.support.json.gson.model.ModelDateJsonDeserializer;
@@ -21,6 +25,8 @@ import org.yelong.support.servlet.wrapper.HttpServletRequestReuseWrapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.labbol.service.exception.InvalidParameterException;
+import com.labbol.service.exception.ServiceException;
+import com.labbol.service.exception.ServiceInernalErrorException;
 
 /**
  * @author PengFei
@@ -28,6 +34,8 @@ import com.labbol.service.exception.InvalidParameterException;
 public abstract class AbstractRequestBodyConvertObject<T> implements RequestBodyConvertObject<T> {
 
 	private static final GsonBuilder modelDeserializerGsonBuilder = new GsonBuilder();
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRequestBodyConvertObject.class);
 
 	static {
 		modelDeserializerGsonBuilder.registerTypeAdapter(Byte.class, new ModelByteJsonDeserializer());
@@ -42,11 +50,21 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 	}
 
 	@Override
-	public T convert(HttpServletRequest request) throws InvalidParameterException {
+	public T convert(HttpServletRequest request) throws ServiceException {
+		String json;
 		try {
-			String json = HttpServletRequestReuseWrapper.readerBodyStr(request);
-			System.out.println("请求参数：" + json);
+			json = HttpServletRequestReuseWrapper.readerBodyStr(request);
+		} catch (IOException e) {
+			throw new ServiceInernalErrorException("读取请求消息体异常", e);
+		}
+		LOGGER.info("(" + request.getRequestURI() + ")请求参数：" + json);
+		if (StringUtils.isBlank(json)) {
+			throw new InvalidParameterException("请求消息体为空");
+		}
+		try {
 			return jsonToObject(json);
+		} catch (ServiceException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new InvalidParameterException(e);
 		}
@@ -55,6 +73,7 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 
 	/**
 	 * 获取可以对model实现值为null的字段update的问题。
+	 * 
 	 * @see #getModelDeserializerGsonBuilder()
 	 */
 	protected GsonBuilder getModelGsonBuilder() {

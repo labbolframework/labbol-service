@@ -15,8 +15,9 @@ import com.google.gson.Gson;
  * 接口服务异常根类
  * 
  * @author PengFei
+ * @since 1.0
  */
-public class ServiceException extends RuntimeException {
+public class ServiceException extends RuntimeException implements ErrorResponseSupplier {
 
 	private static final long serialVersionUID = 2863583512099677644L;
 
@@ -47,11 +48,16 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * @param errorResponse
+	 * @param errorResponse 信息
 	 * @param message       异常信息
 	 */
 	public ServiceException(ErrorResponse errorResponse, String message) {
 		super(message);
+		this.errorResponse = errorResponse;
+	}
+
+	public ServiceException(ErrorResponse errorResponse, String message, Throwable t) {
+		super(message, t);
 		this.errorResponse = errorResponse;
 	}
 
@@ -65,6 +71,20 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
+	 * @param errorResponseSupplier 错误响应信息提供者
+	 */
+	public ServiceException(ErrorResponseSupplier errorResponseSupplier) {
+		this(errorResponseSupplier.getErrorResponse());
+	}
+
+	/**
+	 * @param errorResponseSupplier 错误响应信息提供者
+	 */
+	public ServiceException(ErrorResponseSupplier errorResponseSupplier, String message) {
+		this(errorResponseSupplier.getErrorResponse(), message);
+	}
+
+	/**
 	 * 发生了意外的异常
 	 */
 	public ServiceException(ErrorResponse errorResponse, Throwable throwable) {
@@ -72,6 +92,7 @@ public class ServiceException extends RuntimeException {
 		this.errorResponse = errorResponse;
 	}
 
+	@Override
 	public ErrorResponse getErrorResponse() {
 		return errorResponse;
 	}
@@ -90,21 +111,21 @@ public class ServiceException extends RuntimeException {
 	 * </span>
 	 * </p>
 	 * 
-	 * @author 彭飞
+	 * @author PengFei
 	 * @date 2019年7月17日下午1:06:34
-	 * @return
 	 */
 	public String getErrorResponseJson() {
-		LOGGER.debug(this.getMessage());
+//		LOGGER.debug(this.getMessage());
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put(ERROR_RESPONSE_ROOT_NODE, this.errorResponse);
-		response.put("error_msg", this.getMessage());
+		response.put("error_msg", this.getMessage());// 测试用
 		return new Gson().toJson(response);
 	}
 
 	/**
 	 * @return 异常代码
 	 */
+	@Override
 	public String getCode() {
 		return errorResponse.getCode();
 	}
@@ -112,6 +133,7 @@ public class ServiceException extends RuntimeException {
 	/**
 	 * @return 异常消息
 	 */
+	@Override
 	public String getMsg() {
 		return errorResponse.getMsg();
 	}

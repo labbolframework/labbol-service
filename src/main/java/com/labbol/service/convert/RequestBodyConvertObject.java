@@ -6,6 +6,7 @@ package com.labbol.service.convert;
 import javax.servlet.http.HttpServletRequest;
 
 import com.labbol.service.exception.InvalidParameterException;
+import com.labbol.service.exception.ServiceException;
 
 /**
  * 
@@ -22,6 +23,6 @@ public interface RequestBodyConvertObject<T> {
 	 * @return 请求消息json串转换类型对象
 	 * @throws InvalidParameterException 如果这不是一个符合规范的请求消息
 	 */
-	T convert(HttpServletRequest request) throws InvalidParameterException;
+	T convert(HttpServletRequest request) throws ServiceException;
 
 }
