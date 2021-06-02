@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.labbol.service.configuration.serviceConfiguration
+com.labbol.service.configuration.ServiceConfiguration

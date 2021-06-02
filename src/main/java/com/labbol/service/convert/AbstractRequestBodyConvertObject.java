@@ -49,6 +49,10 @@ public abstract class AbstractRequestBodyConvertObject<T> implements RequestBody
 		modelDeserializerGsonBuilder.registerTypeAdapter(Date.class, new ModelDateJsonDeserializer());
 	}
 
+	protected String readerBodyStr(HttpServletRequest request) throws IOException {
+		return HttpServletRequestReuseWrapper.readerBodyStr(request);
+	}
+	
 	@Override
 	public T convert(HttpServletRequest request) throws ServiceException {
 		String json;

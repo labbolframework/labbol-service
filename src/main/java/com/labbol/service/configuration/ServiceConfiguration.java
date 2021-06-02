@@ -16,6 +16,7 @@ import com.labbol.service.exception.ServiceExceptionResolver;
 /**
  * @author PengFei
  */
+@ConditionalOnProperty(prefix = Labbol.LABBOL_PROPERTIES_PREFIX, name = "service", havingValue = "true", matchIfMissing = false)
 public class ServiceConfiguration {
 
 	@Bean

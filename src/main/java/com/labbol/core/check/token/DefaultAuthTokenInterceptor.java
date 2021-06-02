@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.yelong.commons.util.Dates;
 import org.yelong.core.model.collector.ModelCollectors;
@@ -32,13 +33,16 @@ import com.labbol.service.exception.AuthTokenErrorException;
  */
 public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthTokenInterceptor.class);
+
 	@Resource
 	private LabbolModelService modelService;
 
 	@Resource
 	private UserRightCommonService userRightService;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthTokenInterceptor.class);
+	@Value("${project.tokenEffectiveTime:120}")
+	private Integer tokenEffectiveTime;
 
 	@Override
 	protected boolean validateToken(String token) throws InvalidTokenException {
@@ -48,7 +52,7 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 		} else {
 			// 续命
 			Token tokenModel = new Token();
-			tokenModel.setAuthExpireTime(DateUtils.addMonths(Dates.nowDate(), 60));
+			tokenModel.setAuthExpireTime(DateUtils.addMinutes(Dates.nowDate(), tokenEffectiveTime));
 			modelService.collect(ModelCollectors.modifyModelBySingleColumnEQ(tokenModel, "authToken", token));
 		}
 		return true;
@@ -88,6 +92,8 @@ public class DefaultAuthTokenInterceptor extends AbstractTokenHandlerInterceptor
 	 * @return <code>true</code> 有效
 	 */
 	private boolean tokenIsValid(String token) {
+		LOGGER.info("--------------------------------------------------开始验证token:" + token
+				+ "--------------------------------------------------");
 		if (StringUtils.isEmpty(token)) {
 			return false;
 		}
